@@ -22,6 +22,7 @@
   }
 
   &__popup {
+    opacity: 0;
     position: absolute;
     right: 0;
     margin-top: 15px;
@@ -31,6 +32,7 @@
     overflow: hidden;
     padding: 10px 0;
     width: 160px;
+    transition: 0.3s;
 
     ul {
       overflow: hidden;
@@ -49,5 +51,8 @@
         }
       }
     }
+  }
+  &__popup-active {
+    opacity: 1;
   }
 }

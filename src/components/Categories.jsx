@@ -1,18 +1,28 @@
-import React from 'react';
+import { useState } from 'react';
 
-const Categories = () => {
+const lists = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
+
+export const Categories = () => {
+  const [isActive, setIsActive] = useState(0);
+
+  const onClickCat = (index) => {
+    if (isActive !== index) {
+      setIsActive(index);
+    }
+  };
+
   return (
-    <div class='categories'>
+    <div className='categories'>
       <ul>
-        <li class='active'>Все</li>
-        <li>Мясные</li>
-        <li>Вегетарианская</li>
-        <li>Гриль</li>
-        <li>Острые</li>
-        <li>Закрытые</li>
+        {lists.map((text, index) => (
+          <li
+            className={isActive === index ? 'active' : ''}
+            key={index}
+            onClick={() => onClickCat(index)}>
+            {text}
+          </li>
+        ))}
       </ul>
     </div>
   );
 };
-
-export default Categories;
