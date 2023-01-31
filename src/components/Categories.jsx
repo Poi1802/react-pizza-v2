@@ -1,13 +1,11 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 const lists = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-export const Categories = () => {
-  const [isActive, setIsActive] = useState(0);
-
+export const Categories = ({ activeCategory, setActiveCategory }) => {
   const onClickCat = (index) => {
-    if (isActive !== index) {
-      setIsActive(index);
+    if (activeCategory !== index) {
+      setActiveCategory(index);
     }
   };
 
@@ -16,7 +14,7 @@ export const Categories = () => {
       <ul>
         {lists.map((text, index) => (
           <li
-            className={isActive === index ? 'active' : ''}
+            className={activeCategory === index ? 'active' : ''}
             key={index}
             onClick={() => onClickCat(index)}>
             {text}

@@ -8,6 +8,18 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
+
+    @media (max-width: 630px) {
+      flex-direction: column;
+
+      .header__logo {
+        text-align: center;
+        padding-right: 30px;
+      }
+      .button {
+        margin-top: 30px;
+      }
+    }
   }
 
   &__logo {

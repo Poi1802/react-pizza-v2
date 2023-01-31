@@ -1,10 +1,15 @@
 import { useState, useEffect, useRef } from 'react';
 
-const lists = ['популярности', 'цене', 'алфавиту'];
+const lists = [
+  { name: 'сначала популярные', sortProp: 'rating' },
+  { name: 'сначала не популярные', sortProp: '!rating' },
+  { name: 'сначала дорогие', sortProp: 'price' },
+  { name: 'сначала не дорогие', sortProp: '!price' },
+  { name: 'по алфавиту', sortProp: '!name' },
+];
 
-export const Sort = () => {
+export const Sort = ({ activeList, setActiveList }) => {
   const [popupIsActive, setPopupIsActive] = useState(false);
-  const [activeList, setActiveList] = useState(0);
   const sortRef = useRef(null);
 
   const sortByCat = (index) => {
@@ -30,17 +35,17 @@ export const Sort = () => {
             fill='#2C2C2C'
           />
         </svg>
-        <b className='cu-p'>Сортировка по:</b>
-        <span>{lists[activeList]}</span>
+        <b className='cu-p'>Сортировка:</b>
+        <span>{activeList.name}</span>
       </div>
       <div className={popupIsActive ? 'sort__popup sort__popup-active' : 'sort__popup'}>
         <ul>
-          {lists.map((text, index) => (
+          {lists.map((obj, index) => (
             <li
-              className={activeList === index ? 'active' : ''}
+              className={activeList.name === obj.name ? 'active' : ''}
               key={index}
-              onClick={() => sortByCat(index)}>
-              {text}
+              onClick={() => sortByCat(obj)}>
+              {obj.name}
             </li>
           ))}
         </ul>
