@@ -16,7 +16,10 @@ export const PizzaBlock = ({ imageUrl, name, price, sizes, types }) => {
         <ul>
           {arrTypes.map((type, index) => (
             <li
-              className={classNames({ disable: !types.includes(index), active: activeType === index })}
+              className={classNames({
+                disable: !types.includes(index),
+                active: activeType === index,
+              })}
               onClick={() => setActiveType(index)}
               key={index}>
               {type}
