@@ -16,8 +16,8 @@ function App() {
           </div>
           <h2 className='content__title'>Все пиццы</h2>
           <div className='content__items'>
-            {pizzas.map((obj, index) => (
-              <PizzaBlock key={`${index}_${obj.name}`} {...obj} />
+            {pizzas.map((obj) => (
+              <PizzaBlock key={`${obj.id}_${obj.name}`} {...obj} />
             ))}
           </div>
         </div>
