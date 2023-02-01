@@ -9,7 +9,7 @@ export const Paginate = ({ page, setPage }) => {
         <li
           className={classNames('previous', { disable: page === 1 })}
           onClick={() => setPage(page - 1)}>
-          p
+          {'<'}
         </li>
         {lists.map((num, index) => (
           <li
@@ -20,7 +20,7 @@ export const Paginate = ({ page, setPage }) => {
           </li>
         ))}
         <li className={classNames('next', { disable: page === 3 })} onClick={() => setPage(page + 1)}>
-          n
+          {'>'}
         </li>
       </ul>
     </>
