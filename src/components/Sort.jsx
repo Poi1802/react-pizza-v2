@@ -4,7 +4,7 @@ const lists = [
   { name: 'сначала популярные', sortProp: 'rating' },
   { name: 'сначала не популярные', sortProp: '!rating' },
   { name: 'сначала дорогие', sortProp: 'price' },
-  { name: 'сначала не дорогие', sortProp: '!price' },
+  { name: 'сначала дешёвые', sortProp: '!price' },
   { name: 'по алфавиту', sortProp: '!name' },
 ];
 
@@ -24,6 +24,7 @@ export const Sort = ({ activeList, setActiveList }) => {
       }
     };
     document.addEventListener('click', onClick);
+    return () => document.removeEventListener('click', onClick);
   }, []);
 
   return (

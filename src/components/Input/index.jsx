@@ -4,6 +4,7 @@ import styles from './InputBlock.module.scss';
 
 export const Input = () => {
   const { searchValue, setSearchValue } = useContext(AppContext);
+
   return (
     <div className={styles.root}>
       <img className={styles.search} src='search-input.svg' alt='' />
