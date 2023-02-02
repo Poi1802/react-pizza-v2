@@ -1,4 +1,6 @@
 import { useState, useEffect, useRef } from 'react';
+import { useDispatch } from 'react-redux';
+import { setActiveList } from '../redux/slices/filterSlice';
 
 const lists = [
   { name: 'сначала популярные', sortProp: 'rating' },
@@ -8,12 +10,13 @@ const lists = [
   { name: 'по алфавиту', sortProp: '!name' },
 ];
 
-export const Sort = ({ activeList, setActiveList }) => {
+export const Sort = ({ activeList }) => {
   const [popupIsActive, setPopupIsActive] = useState(false);
   const sortRef = useRef(null);
+  const dispatch = useDispatch();
 
   const sortByCat = (index) => {
-    setActiveList(index);
+    dispatch(setActiveList(index));
     setPopupIsActive(false);
   };
 

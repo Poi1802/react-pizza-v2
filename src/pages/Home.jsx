@@ -8,16 +8,24 @@ import { Categories } from '../components/Categories';
 import { Paginate } from '../components/Paginate';
 import { AppContext } from '../App';
 
+import { useSelector, useDispatch } from 'react-redux';
+import { setActiveCategory } from '../redux/slices/filterSlice';
+
 export const Home = () => {
   const { searchValue } = useContext(AppContext);
 
+  const dispatch = useDispatch();
+  const { activeCategory, activeList } = useSelector((state) => {
+    console.log(state.filter);
+    return state.filter;
+  });
+  const onChangeCategory = (id) => {
+    dispatch(setActiveCategory(id));
+  };
+
   const [pizzas, setPizzas] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
-  const [activeCategory, setActiveCategory] = useState(0);
-  const [activeList, setActiveList] = useState({
-    name: 'сначала популярные',
-    sortProp: 'rating',
-  });
+
   const [page, setPage] = useState(1);
 
   useEffect(() => {
@@ -48,8 +56,8 @@ export const Home = () => {
   return (
     <div className='container'>
       <div className='content__top'>
-        <Categories activeCategory={activeCategory} setActiveCategory={setActiveCategory} />
-        <Sort activeList={activeList} setActiveList={setActiveList} />
+        <Categories activeCategory={activeCategory} setActiveCategory={onChangeCategory} />
+        <Sort activeList={activeList} />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       <div className='content__items'>{isLoading ? skeletons : pizzaItems}</div>
