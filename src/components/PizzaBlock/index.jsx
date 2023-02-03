@@ -1,12 +1,33 @@
 import classNames from 'classnames';
 import { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem } from '../../redux/slices/cartSlice';
 
 const arrSizes = [26, 30, 40];
 const arrTypes = ['тонкое', 'традиционное'];
 
-export const PizzaBlock = ({ imageUrl, name, price, sizes, types }) => {
+export const PizzaBlock = ({ id, imageUrl, name, price, sizes, types }) => {
   const [activeType, setActiveType] = useState(types[0]);
   const [activeSize, setActiveSize] = useState(sizes[0]);
+
+  let item = useSelector((state) => state.cart.items.filter((obj) => obj.id === id));
+
+  const totalItems = item.reduce((sum, obj) => obj.count + sum, 0);
+
+  const dispatch = useDispatch();
+
+  const onClickAdd = () => {
+    dispatch(
+      addItem({
+        id,
+        imageUrl,
+        name,
+        price,
+        size: activeSize,
+        type: arrTypes[activeType],
+      })
+    );
+  };
 
   return (
     <div className='pizza-block-wrapper'>
@@ -30,7 +51,10 @@ export const PizzaBlock = ({ imageUrl, name, price, sizes, types }) => {
           <ul>
             {arrSizes.map((size, index) => (
               <li
-                className={classNames({ disable: !sizes.includes(size), active: activeSize === size })}
+                className={classNames({
+                  disable: !sizes.includes(size),
+                  active: activeSize === size,
+                })}
                 onClick={() => setActiveSize(size)}
                 key={index}>
                 {size} см.
@@ -40,7 +64,7 @@ export const PizzaBlock = ({ imageUrl, name, price, sizes, types }) => {
         </div>
         <div className='pizza-block__bottom'>
           <div className='pizza-block__price'>от {price} ₽</div>
-          <div className='button button--outline button--add'>
+          <div className='button button--outline button--add' onClick={onClickAdd}>
             <svg
               width='12'
               height='12'
@@ -53,7 +77,7 @@ export const PizzaBlock = ({ imageUrl, name, price, sizes, types }) => {
               />
             </svg>
             <span>Добавить</span>
-            <i>0</i>
+            {totalItems > 0 && <i>{totalItems}</i>}
           </div>
         </div>
       </div>
