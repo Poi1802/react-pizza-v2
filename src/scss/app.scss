@@ -19,6 +19,19 @@ body {
 .content {
   padding: 40px 0;
 
+  &__error-pizza {
+    margin: 200px auto;
+    width: 600px;
+    text-align: center;
+
+    h2 {
+      font-size: 26px;
+    }
+    p {
+      font-size: 22px;
+    }
+  }
+
   &__title {
     margin: 35px 0;
   }

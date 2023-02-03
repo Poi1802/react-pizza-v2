@@ -7,34 +7,31 @@ import { Sort, sortList } from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import { Categories } from '../components/Categories';
 import { Paginate } from '../components/Paginate';
-import { AppContext } from '../App';
 
 import { useSelector, useDispatch } from 'react-redux';
 import { setActiveCategory, setFilters } from '../redux/slices/filterSlice';
 import { useNavigate } from 'react-router-dom';
+import { fetchPizza } from '../redux/slices/fetchSlice';
 
 export const Home = () => {
-  const { searchValue } = useContext(AppContext);
-
-  const [pizzas, setPizzas] = useState([]);
-  const [isLoading, setIsLoading] = useState(true);
   const isMount = useRef(false);
   const isSearch = useRef(false);
 
   const navigate = useNavigate();
 
   const dispatch = useDispatch();
-  const { activeCategory, activeList, page } = useSelector((state) => {
+
+  const { activeCategory, activeList, page, searchValue } = useSelector((state) => {
     return state.filter;
   });
+
+  const { pizzas, status } = useSelector((state) => state.pizza);
 
   const onChangeCategory = (id) => {
     dispatch(setActiveCategory(id));
   };
 
-  const fetchData = () => {
-    setIsLoading(true);
-
+  const fetchData = async () => {
     const pages = `_page=${page}&_limit=4`;
     const filterByCat = activeCategory > 0 ? `&category=${activeCategory}` : '';
     const sortByCat = `&_sort=${activeList.sortProp.replace('!', '')}&_order=${
@@ -42,14 +39,7 @@ export const Home = () => {
     }`;
     const search = `&name_like=${searchValue}`;
 
-    axios
-      .get(
-        `https://react-pizza-server.onrender.com/pizzas/?${pages}${filterByCat}${sortByCat}${search}`
-      )
-      .then(({ data }) => {
-        setPizzas(data);
-        setIsLoading(false);
-      });
+    dispatch(fetchPizza({ pages, filterByCat, sortByCat, search }));
   };
 
   useEffect(() => {
@@ -69,14 +59,6 @@ export const Home = () => {
   }, []);
 
   useEffect(() => {
-    if (!isSearch.current) {
-      fetchData();
-    }
-    isSearch.current = false;
-
-    window.scrollTo(0, 0);
-  }, [activeCategory, activeList, page, searchValue]);
-  useEffect(() => {
     if (isMount.current) {
       const queryString = qs.stringify({
         sort: activeList.sortProp,
@@ -90,6 +72,15 @@ export const Home = () => {
     isMount.current = true;
   }, [activeCategory, activeList, page, searchValue]);
 
+  useEffect(() => {
+    if (!isSearch.current) {
+      fetchData();
+    }
+    isSearch.current = false;
+
+    window.scroll(0, 0);
+  }, [activeCategory, activeList, page, searchValue]);
+
   const pizzaItems = pizzas.map((obj) => <PizzaBlock key={`${obj.id}_${obj.name}`} {...obj} />);
   const skeletons = [...new Array(4)].map((_, index) => <Skeleton key={index} />);
 
@@ -100,7 +91,19 @@ export const Home = () => {
         <Sort activeList={activeList} />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
-      <div className='content__items'>{isLoading ? skeletons : pizzaItems}</div>
+      {status === 'error' ? (
+        <div className='content__error-pizza'>
+          <div>
+            <h2>
+              Ошибка запроса к серверу
+              <span>😕</span>
+            </h2>
+            <p>К сожалению, не удалось получить пиццы. Повторите попытку чуть позже</p>
+          </div>
+        </div>
+      ) : (
+        <div className='content__items'>{status === 'loading' ? skeletons : pizzaItems}</div>
+      )}
       <Paginate page={page} />
     </div>
   );
