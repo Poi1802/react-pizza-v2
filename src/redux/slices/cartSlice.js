@@ -40,7 +40,10 @@ const cartSlice = createSlice({
       if (findItem) {
         findItem.count--;
       }
-      state.items = state.items.filter((obj) => obj.count !== 0);
+      if (findItem.count < 1 && window.confirm('Ты действительно хочешь выкинуть пиццки? :(')) {
+        state.items = state.items.filter((obj) => obj.count !== 0);
+      }
+
       state.totalPrice = state.items.reduce((sum, obj) => sum + obj.price * obj.count, 0);
     },
     removeItem(state, action) {
@@ -53,6 +56,10 @@ const cartSlice = createSlice({
     },
   },
 });
+
+export const selectCart = (state) => state.cart;
+export const selectCartItemById = (id) => (state) =>
+  state.cart.items.filter((obj) => obj.id === id);
 
 export const { addItem, removeItem, clearItems, minusItem } = cartSlice.actions;
 

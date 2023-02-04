@@ -18,6 +18,11 @@
   &-wrapper {
     display: flex;
     justify-content: center;
+    transition: transform 0.25s ease-in-out;
+
+    &:hover {
+      transform: scale(1.02);
+    }
   }
 
   &__title {

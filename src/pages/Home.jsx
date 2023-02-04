@@ -21,9 +21,7 @@ export const Home = () => {
 
   const dispatch = useDispatch();
 
-  const { activeCategory, activeList, page, searchValue } = useSelector((state) => {
-    return state.filter;
-  });
+  const { activeCategory, activeList, page, searchValue } = useSelector((state) => state.filter);
 
   const { pizzas, status } = useSelector((state) => state.pizza);
 

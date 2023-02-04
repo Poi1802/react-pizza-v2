@@ -4,10 +4,10 @@ import { Link } from 'react-router-dom';
 
 import styles from './CartBlock.module.scss';
 import { CartItem } from './CartItem';
-import { clearItems } from '../../redux/slices/cartSlice';
+import { clearItems, selectCart } from '../../redux/slices/cartSlice';
 
 export const CartBlock = () => {
-  const { items, totalPrice } = useSelector((state) => state.cart);
+  const { items, totalPrice } = useSelector(selectCart);
 
   const totalCount = items.reduce((sum, obj) => sum + obj.count, 0);
 

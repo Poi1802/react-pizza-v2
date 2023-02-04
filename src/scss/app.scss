@@ -2,7 +2,9 @@
 @import './libs/normalize';
 
 @import './components/all';
-
+html {
+  scroll-behavior: smooth;
+}
 body {
   background-color: $background;
 }
