@@ -1,10 +1,17 @@
 import axios from 'axios';
 import { useEffect, useState } from 'react';
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
-export const PizzaInfo = () => {
-  const [pizza, setPizza] = useState();
+interface IPizzaInfo {
+  imageUrl: string;
+  name: string;
+  price: number;
+}
+
+export const PizzaInfo: React.FC = () => {
+  const [pizza, setPizza] = useState<IPizzaInfo>();
   const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchPizza = async () => {
@@ -13,6 +20,7 @@ export const PizzaInfo = () => {
         setPizza(data);
       } catch (error) {
         alert('Error PizzaInfo');
+        navigate('/');
       }
     };
 
@@ -20,7 +28,7 @@ export const PizzaInfo = () => {
   }, []);
 
   return !pizza ? (
-    'Загрузка...'
+    <>Загрузка...</>
   ) : (
     <div className='container'>
       <img width={350} src={pizza.imageUrl} alt='' />

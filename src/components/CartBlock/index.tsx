@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
 
@@ -6,10 +5,21 @@ import styles from './CartBlock.module.scss';
 import { CartItem } from './CartItem';
 import { clearItems, selectCart } from '../../redux/slices/cartSlice';
 
-export const CartBlock = () => {
+type ItemsElem = {
+  id: number;
+  imageUrl: string;
+  name: string;
+  price: number;
+  uniqueId: string;
+  size: number;
+  type: string;
+  count: number;
+};
+
+export const CartBlock: React.FC = () => {
   const { items, totalPrice } = useSelector(selectCart);
 
-  const totalCount = items.reduce((sum, obj) => sum + obj.count, 0);
+  const totalCount = items.reduce((sum: number, obj: any) => sum + obj.count, 0);
 
   const dispatch = useDispatch();
 
@@ -104,7 +114,7 @@ export const CartBlock = () => {
             </div>
           </div>
           <div className='content__items'>
-            {items.map((item) => (
+            {items.map((item: ItemsElem) => (
               <CartItem key={`${item.id}_${item.size}_${item.type}`} {...item} />
             ))}
           </div>

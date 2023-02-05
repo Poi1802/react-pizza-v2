@@ -1,17 +1,22 @@
-import { useEffect, useState, useContext, useRef } from 'react';
-import axios from 'axios';
+import { useEffect, useRef } from 'react';
 import qs from 'qs';
 
 import { PizzaBlock } from '../components/PizzaBlock';
-import { Sort, sortList } from '../components/Sort';
+import { Sort, SortItem, sortList } from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import { Categories } from '../components/Categories';
 import { Paginate } from '../components/Paginate';
 
 import { useSelector, useDispatch } from 'react-redux';
-import { setActiveCategory, setFilters } from '../redux/slices/filterSlice';
+import {
+  FilterState,
+  selectFilter,
+  setActiveCategory,
+  setFilters,
+} from '../redux/slices/filterSlice';
 import { useNavigate } from 'react-router-dom';
-import { fetchPizza } from '../redux/slices/fetchSlice';
+import { fetchPizza, selectPizzaFetch } from '../redux/slices/fetchSlice';
+import { useAppDispatch } from '../redux/store';
 
 export const Home = () => {
   const isMount = useRef(false);
@@ -19,13 +24,13 @@ export const Home = () => {
 
   const navigate = useNavigate();
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
-  const { activeCategory, activeList, page, searchValue } = useSelector((state) => state.filter);
+  const { activeCategory, activeList, page, searchValue } = useSelector(selectFilter);
 
-  const { pizzas, status } = useSelector((state) => state.pizza);
+  const { pizzas, status } = useSelector(selectPizzaFetch);
 
-  const onChangeCategory = (id) => {
+  const onChangeCategory = (id: number) => {
     dispatch(setActiveCategory(id));
   };
 
@@ -44,14 +49,15 @@ export const Home = () => {
     if (window.location.search) {
       const params = qs.parse(window.location.search.substring(1));
 
-      const sortProperties = sortList.find((obj) => obj.sortProp === params.sort);
+      const activeList = sortList.find((obj) => params.sort && obj.sortProp === params.sort);
 
       dispatch(
         setFilters({
           ...params,
-          sortProperties,
-        })
+          activeList,
+        } as FilterState)
       );
+
       isSearch.current = true;
     }
   }, []);
@@ -79,14 +85,16 @@ export const Home = () => {
     window.scroll(0, 0);
   }, [activeCategory, activeList, page, searchValue]);
 
-  const pizzaItems = pizzas.map((obj) => <PizzaBlock key={`${obj.id}_${obj.name}`} {...obj} />);
+  const pizzaItems = pizzas.map((obj: any) => (
+    <PizzaBlock key={`${obj.id}_${obj.name}`} {...obj} />
+  ));
   const skeletons = [...new Array(4)].map((_, index) => <Skeleton key={index} />);
 
   return (
     <div className='container'>
       <div className='content__top'>
         <Categories activeCategory={activeCategory} setActiveCategory={onChangeCategory} />
-        <Sort activeList={activeList} />
+        <Sort />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       {status === 'error' ? (

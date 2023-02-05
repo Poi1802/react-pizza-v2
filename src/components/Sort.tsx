@@ -1,8 +1,13 @@
 import { useState, useEffect, useRef } from 'react';
-import { useDispatch } from 'react-redux';
-import { setActiveList } from '../redux/slices/filterSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectFilter, setActiveList } from '../redux/slices/filterSlice';
 
-export const sortList = [
+export type SortItem = {
+  name: string;
+  sortProp: 'rating' | 'price' | '!name' | '!rating' | '!price';
+};
+
+export const sortList: SortItem[] = [
   { name: 'сначала популярные', sortProp: 'rating' },
   { name: 'сначала не популярные', sortProp: '!rating' },
   { name: 'сначала дорогие', sortProp: 'price' },
@@ -10,19 +15,20 @@ export const sortList = [
   { name: 'по алфавиту', sortProp: '!name' },
 ];
 
-export const Sort = ({ activeList }) => {
-  const [popupIsActive, setPopupIsActive] = useState(false);
-  const sortRef = useRef(null);
+export const Sort: React.FC = () => {
+  const [popupIsActive, setPopupIsActive] = useState<boolean>(false);
+  const { activeList } = useSelector(selectFilter);
+  const sortRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
-  const sortByCat = (obj) => {
+  const sortByCat = (obj: SortItem) => {
     dispatch(setActiveList(obj));
     setPopupIsActive(false);
   };
 
   useEffect(() => {
-    const onClick = (e) => {
-      if (!sortRef.current.contains(e.target)) {
+    const onClick = (e: MouseEvent) => {
+      if (e.target && !sortRef.current?.contains(e.target as Node)) {
         setPopupIsActive(false);
       }
     };

@@ -1,9 +1,12 @@
-import { useState, useEffect } from 'react';
-
 const lists = ['Все', 'Мясные', 'Вегетарианская', 'Гриль', 'Острые', 'Закрытые'];
 
-export const Categories = ({ activeCategory, setActiveCategory }) => {
-  const onClickCat = (index) => {
+type CategoriesProps = {
+  activeCategory: number;
+  setActiveCategory: (id: number) => void;
+};
+
+export const Categories: React.FC<CategoriesProps> = ({ activeCategory, setActiveCategory }) => {
+  const onClickCat = (index: number) => {
     if (activeCategory !== index) {
       setActiveCategory(index);
     }

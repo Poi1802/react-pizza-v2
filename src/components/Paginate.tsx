@@ -2,7 +2,11 @@ import classNames from 'classnames';
 import { useDispatch } from 'react-redux';
 import { setPage } from '../redux/slices/filterSlice';
 
-export const Paginate = ({ page }) => {
+type PaginateProps = {
+  page: number;
+};
+
+export const Paginate: React.FC<PaginateProps> = ({ page }) => {
   const lists = [1, 2, 3];
   const dispatch = useDispatch();
 

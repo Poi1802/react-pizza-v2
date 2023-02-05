@@ -3,17 +3,34 @@ import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { addItem, selectCartItemById } from '../../redux/slices/cartSlice';
+import { v4 as uuidv4 } from 'uuid';
+
+type PizzaBlockProps = {
+  id: number;
+  imageUrl: string;
+  name: string;
+  price: number;
+  sizes: number[];
+  types: number[];
+};
 
 const arrSizes = [26, 30, 40];
 const arrTypes = ['тонкое', 'традиционное'];
 
-export const PizzaBlock = ({ id, imageUrl, name, price, sizes, types }) => {
-  const [activeType, setActiveType] = useState(types[0]);
-  const [activeSize, setActiveSize] = useState(sizes[0]);
+export const PizzaBlock: React.FC<PizzaBlockProps> = ({
+  id,
+  imageUrl,
+  name,
+  price,
+  sizes,
+  types,
+}) => {
+  const [activeType, setActiveType] = useState<number>(types[0]);
+  const [activeSize, setActiveSize] = useState<number>(sizes[0]);
 
   let item = useSelector(selectCartItemById(id));
 
-  const totalItems = item.reduce((sum, obj) => obj.count + sum, 0);
+  const totalItems = item.reduce((sum: number, obj: any) => obj.count + sum, 0);
 
   const dispatch = useDispatch();
 
@@ -26,6 +43,8 @@ export const PizzaBlock = ({ id, imageUrl, name, price, sizes, types }) => {
         price,
         size: activeSize,
         type: arrTypes[activeType],
+        count: 1,
+        uniqueId: uuidv4(),
       })
     );
   };

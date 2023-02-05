@@ -2,14 +2,34 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { addItem, minusItem, removeItem } from '../../redux/slices/cartSlice';
 
-export const CartItem = ({ id, imageUrl, price, count, type, size, name, uniqueId }) => {
+type CartItemProps = {
+  id: number;
+  imageUrl: string;
+  price: number;
+  count: number;
+  type: string;
+  size: number;
+  name: string;
+  uniqueId: string;
+};
+
+export const CartItem: React.FC<CartItemProps> = ({
+  id,
+  imageUrl,
+  price,
+  count,
+  type,
+  size,
+  name,
+  uniqueId,
+}) => {
   const dispatch = useDispatch();
 
   const onClickPlus = () => {
-    dispatch(addItem({ id, type, size }));
+    dispatch(addItem({ id, type, size } as CartItemProps));
   };
   const onClickMinus = () => {
-    dispatch(minusItem({ id, type, size }));
+    dispatch(minusItem({ id, type, size } as CartItemProps));
   };
   const onClickRemove = () => {
     if (window.confirm('Ты действительно хочешь выкинуть пиццку? :(')) {
@@ -30,7 +50,6 @@ export const CartItem = ({ id, imageUrl, price, count, type, size, name, uniqueI
       </div>
       <div className='cart__item-count'>
         <button
-          disabled=''
           className='button button--outline button--circle cart__item-count-minus'
           onClick={onClickMinus}>
           <svg
