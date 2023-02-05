@@ -1,13 +1,13 @@
-import { useEffect, useRef } from 'react';
+import { useCallback, useEffect, useRef } from 'react';
 import qs from 'qs';
 
 import { PizzaBlock } from '../components/PizzaBlock';
-import { Sort, SortItem, sortList } from '../components/Sort';
+import { Sort, sortList } from '../components/Sort';
 import Skeleton from '../components/PizzaBlock/Skeleton';
 import { Categories } from '../components/Categories';
 import { Paginate } from '../components/Paginate';
 
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   FilterState,
   selectFilter,
@@ -30,9 +30,9 @@ export const Home = () => {
 
   const { pizzas, status } = useSelector(selectPizzaFetch);
 
-  const onChangeCategory = (id: number) => {
+  const onChangeCategory = useCallback((id: number) => {
     dispatch(setActiveCategory(id));
-  };
+  }, []);
 
   const fetchData = async () => {
     const pages = `_page=${page}&_limit=4`;
@@ -94,7 +94,7 @@ export const Home = () => {
     <div className='container'>
       <div className='content__top'>
         <Categories activeCategory={activeCategory} setActiveCategory={onChangeCategory} />
-        <Sort />
+        <Sort activeList={activeList} />
       </div>
       <h2 className='content__title'>Все пиццы</h2>
       {status === 'error' ? (

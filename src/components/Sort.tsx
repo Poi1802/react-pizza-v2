@@ -1,6 +1,6 @@
-import { useState, useEffect, useRef } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { selectFilter, setActiveList } from '../redux/slices/filterSlice';
+import { useState, useEffect, useRef, memo } from 'react';
+import { useDispatch } from 'react-redux';
+import { setActiveList } from '../redux/slices/filterSlice';
 
 export type SortItem = {
   name: string;
@@ -15,9 +15,13 @@ export const sortList: SortItem[] = [
   { name: 'по алфавиту', sortProp: '!name' },
 ];
 
-export const Sort: React.FC = () => {
+type SortProps = {
+  activeList: SortItem;
+};
+
+export const Sort: React.FC<SortProps> = memo(({ activeList }) => {
   const [popupIsActive, setPopupIsActive] = useState<boolean>(false);
-  const { activeList } = useSelector(selectFilter);
+  // const { activeList } = useSelector(selectFilter);
   const sortRef = useRef<HTMLDivElement>(null);
   const dispatch = useDispatch();
 
@@ -67,4 +71,4 @@ export const Sort: React.FC = () => {
       </div>
     </div>
   );
-};
+});
